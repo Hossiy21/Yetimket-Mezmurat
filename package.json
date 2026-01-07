@@ -1,21 +1,43 @@
 {
   "name": "orthodox-mezmur---bole-debre-salem",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Ethiopian Orthodox Tewahedo Church mezmur collection from Bole Debre Salem Medhane'Alem Church",
+  "keywords": [
+    "ethiopian",
+    "orthodox",
+    "mezmur",
+    "hymns",
+    "amharic",
+    "church",
+    "boole-debre-salem"
+  ],
+  "author": "Hossiy Dev",
+  "license": "MIT",
+  "homepage": "https://hossiydev.github.io/orthodox-mezmur---bole-debre-salem/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hossiydev/orthodox-mezmur---bole-debre-salem.git"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "react": "^19.2.3",
     "lucide-react": "^0.562.0",
+    "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "gh-pages": "^6.3.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }
