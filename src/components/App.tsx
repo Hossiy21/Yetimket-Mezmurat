@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { MEZMURS } from './data';
-import { Theme } from './types';
+import { MEZMURS } from '../data/mezmurData';
+import { Theme } from '../types';
 import {
   Search,
   Moon,
@@ -69,8 +69,8 @@ const App: React.FC = () => {
   };
 
   const toggleFavorite = (id: number) => {
-    setFavorites(prev => 
-      prev.includes(id) 
+    setFavorites(prev =>
+      prev.includes(id)
         ? prev.filter(fId => fId !== id)
         : [...prev, id]
     );
@@ -199,7 +199,7 @@ const App: React.FC = () => {
                       መዝሙሮች ስብስብ</span>
                   </h1>
                   <p className={`text-[10px] uppercase tracking-[0.2em] font-medium ${isDark ? 'text-amber-200/60' : 'text-stone-600'}`}>
-ቦሌ ደብረ ሳሌም መድኃኔዓለም መጥምቁ ቅዱስ ዮሐንስ ወአቡነ አረጋዊ ካቴድራል ፈለገ ዮርዳኖስ ሰንበት ትምህርት ቤት                  </p>
+                    ቦሌ ደብረ ሳሌም መድኃኔዓለም መጥምቁ ቅዱስ ዮሐንስ ወአቡነ አረጋዊ ካቴድራል ፈለገ ዮርዳኖስ ሰንበት ትምህርት ቤት                  </p>
                 </div>
               </div>
             </div>
@@ -218,7 +218,7 @@ const App: React.FC = () => {
                   <Home size={18} />
                 </button>
               )}
-              
+
               {/* Random Button */}
               <button
                 onClick={randomMezmur}
@@ -342,68 +342,68 @@ const App: React.FC = () => {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                 {filteredMezmurs.map((mezmur, index) => (
-                <div
-                  key={mezmur.id}
-                  onClick={() => handleSelectMezmur(mezmur.id)}
-                  className={`group cursor-pointer relative overflow-hidden transition-all duration-500 rounded-3xl p-6 sm:p-8 hover:-translate-y-2 hover:shadow-2xl ${isDark
-                    ? 'bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-amber-500/30 hover:shadow-amber-500/10'
-                    : 'bg-[#fffaf0]/90 backdrop-blur-sm border border-amber-200/70 hover:border-amber-400/80 hover:shadow-amber-100/60'
-                    }`}
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  {/* Hover gradient overlay */}
-                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${isDark
-                    ? 'bg-gradient-to-br from-amber-500/10 via-transparent to-purple-500/10'
-                    : 'bg-gradient-to-br from-amber-50 via-transparent to-yellow-50/60'
-                    }`} />
-
-                  {/* Favorite Button */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleFavorite(mezmur.id);
-                    }}
-                    className={`absolute top-4 right-4 z-20 p-2 rounded-xl transition-all duration-300 ${favorites.includes(mezmur.id)
-                      ? isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-900 border border-amber-200/70'
-                      : isDark ? 'bg-white/10 text-white/40 hover:text-white hover:bg-white/20' : 'bg-[#fffaf0]/85 text-stone-500 hover:text-stone-800 hover:bg-[#fffaf0] border border-amber-200/60'
+                  <div
+                    key={mezmur.id}
+                    onClick={() => handleSelectMezmur(mezmur.id)}
+                    className={`group cursor-pointer relative overflow-hidden transition-all duration-500 rounded-3xl p-6 sm:p-8 hover:-translate-y-2 hover:shadow-2xl ${isDark
+                      ? 'bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-amber-500/30 hover:shadow-amber-500/10'
+                      : 'bg-[#fffaf0]/90 backdrop-blur-sm border border-amber-200/70 hover:border-amber-400/80 hover:shadow-amber-100/60'
                       }`}
+                    style={{ animationDelay: `${index * 50}ms` }}
                   >
-                    <Bookmark size={16} fill={favorites.includes(mezmur.id) ? 'currentColor' : 'none'} />
-                  </button>
+                    {/* Hover gradient overlay */}
+                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${isDark
+                      ? 'bg-gradient-to-br from-amber-500/10 via-transparent to-purple-500/10'
+                      : 'bg-gradient-to-br from-amber-50 via-transparent to-yellow-50/60'
+                      }`} />
 
-                  {/* Number */}
-                  <div className="relative z-10 mb-6">
-                    <span className={`font-bold tracking-tight transition-all duration-300 text-6xl sm:text-7xl ${isDark
-                      ? 'text-white/10 group-hover:text-amber-500/40'
-                      : 'text-amber-200/60 group-hover:text-amber-600/20'
-                      }`}>
-                      {String(mezmur.id).padStart(2, '0')}
-                    </span>
-                  </div>
+                    {/* Favorite Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(mezmur.id);
+                      }}
+                      className={`absolute top-4 right-4 z-20 p-2 rounded-xl transition-all duration-300 ${favorites.includes(mezmur.id)
+                        ? isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-900 border border-amber-200/70'
+                        : isDark ? 'bg-white/10 text-white/40 hover:text-white hover:bg-white/20' : 'bg-[#fffaf0]/85 text-stone-500 hover:text-stone-800 hover:bg-[#fffaf0] border border-amber-200/60'
+                        }`}
+                    >
+                      <Bookmark size={16} fill={favorites.includes(mezmur.id) ? 'currentColor' : 'none'} />
+                    </button>
 
-                  {/* Title */}
-                  <div className="relative z-10">
-                    <h3 className={`heading-font font-bold ethiopic-font leading-tight transition-colors text-xl sm:text-2xl ${isDark
-                      ? 'text-white group-hover:text-amber-100'
-                      : 'text-stone-900'
-                      }`}>
-                      {mezmur.title}
-                    </h3>
-                    <p className={`mt-3 text-sm line-clamp-2 ${isDark ? 'text-white/60' : 'text-stone-600'}`}>
-                      {mezmur.lyrics[0]}...
-                    </p>
-                  </div>
+                    {/* Number */}
+                    <div className="relative z-10 mb-6">
+                      <span className={`font-bold tracking-tight transition-all duration-300 text-6xl sm:text-7xl ${isDark
+                        ? 'text-white/10 group-hover:text-amber-500/40'
+                        : 'text-amber-200/60 group-hover:text-amber-600/20'
+                        }`}>
+                        {String(mezmur.id).padStart(2, '0')}
+                      </span>
+                    </div>
 
-                  {/* Arrow indicator */}
-                  <div className={`absolute bottom-6 right-6 z-10 transition-all duration-300 ${isDark
-                    ? 'text-white/20 group-hover:text-amber-400'
-                    : 'text-stone-300 group-hover:text-amber-800'
-                    } opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0`}>
-                    <ChevronRight size={24} />
+                    {/* Title */}
+                    <div className="relative z-10">
+                      <h3 className={`heading-font font-bold ethiopic-font leading-tight transition-colors text-xl sm:text-2xl ${isDark
+                        ? 'text-white group-hover:text-amber-100'
+                        : 'text-stone-900'
+                        }`}>
+                        {mezmur.title}
+                      </h3>
+                      <p className={`mt-3 text-sm line-clamp-2 ${isDark ? 'text-white/60' : 'text-stone-600'}`}>
+                        {mezmur.lyrics[0]}...
+                      </p>
+                    </div>
+
+                    {/* Arrow indicator */}
+                    <div className={`absolute bottom-6 right-6 z-10 transition-all duration-300 ${isDark
+                      ? 'text-white/20 group-hover:text-amber-400'
+                      : 'text-stone-300 group-hover:text-amber-800'
+                      } opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0`}>
+                      <ChevronRight size={24} />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
             )}
           </div>
         ) : (
@@ -510,7 +510,7 @@ const App: React.FC = () => {
                       : 'bg-amber-50 border border-amber-200/70'
                       }`}>
                       <span className={`text-xs font-bold uppercase tracking-widest ${isDark ? 'text-amber-400/70' : 'text-stone-600'}`}>
-                        
+
                       </span>
                       <span className={`text-4xl font-bold ${isDark ? 'text-amber-400' : 'text-amber-900'}`}>
                         {String(currentMezmur?.id).padStart(2, '0')}
@@ -669,7 +669,7 @@ const App: React.FC = () => {
             <p className={`ethiopic-font text-sm leading-relaxed ${isDark ? 'text-white/70' : 'text-stone-800'} mb-3`}>
               ቦሌ ደብረ ሳሌም መድኃኔዓለም መጥምቁ ቅዱስ ዮሐንስ ወአቡነ አረጋዊ ካቴድራል ፈለገ ዮርዳኖስ ሰንበት ትምህርት ቤት
             </p>
-            
+
             <p className={`text-xs mt-2 ${isDark ? 'text-white/30' : 'text-stone-500'}`}>
               Made with <Heart size={12} className="inline text-red-400 mx-1" />
             </p>

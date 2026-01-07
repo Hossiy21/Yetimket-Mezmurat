@@ -1,5 +1,5 @@
 
-import { Mezmur } from './types';
+import { Mezmur } from '../types';
 
 export const MEZMURS: Mezmur[] = [
   {
