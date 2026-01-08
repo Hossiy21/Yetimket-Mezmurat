@@ -329,6 +329,7 @@ const App: React.FC = () => {
                 <h2 className={`heading-font text-center text-4xl sm:text-5xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-stone-900'}`}>
                   የጥምቀት መዝሙሮች
                 </h2>
+                <p> ቦሌ ደብረ ሳሌም መድኃኔዓለም መጥምቁ ቅዱስ ዮሐንስ ወአቡነ አረጋዊ ካቴድራል ፈለገ ዮርዳኖስ ሰንበት ትምህርት ቤት</p>
               </div>
             </div>
 
