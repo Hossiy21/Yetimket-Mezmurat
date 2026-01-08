@@ -571,7 +571,7 @@ const App: React.FC = () => {
                     type="text"
                     value={sidebarQuery}
                     onChange={(e) => setSidebarQuery(e.target.value)}
-                    placeholder="የመዝሙር ስንኝ ያስገቡ ለመፈለግ..."
+                    placeholder="በመዝሙር ርዕስ ይፈልጉ..."
                     className={`w-full pl-10 pr-10 py-2.5 rounded-xl border outline-none text-sm transition-all duration-300 ${isDark
                       ? 'bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-amber-500/40'
                       : 'bg-[#fffaf0] border-amber-200/80 text-stone-900 placeholder:text-stone-500 focus:border-amber-500/70'
