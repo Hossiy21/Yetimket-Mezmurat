@@ -199,7 +199,7 @@ const App: React.FC = () => {
                       መዝሙሮች ስብስብ</span>
                   </h1>
                   <p className={`text-[10px] uppercase tracking-[0.2em] font-medium ${isDark ? 'text-amber-200/60' : 'text-stone-600'}`}>
-                    ቦሌ ደብረ ሳሌም መድኃኔዓለም መጥምቁ ቅዱስ ዮሐንስ ወአቡነ አረጋዊ ካቴድራል ፈለገ ዮርዳኖስ ሰንበት ትምህርት ቤት                  </p>
+                                    </p>
                 </div>
               </div>
             </div>
