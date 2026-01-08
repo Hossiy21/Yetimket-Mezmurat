@@ -22,7 +22,8 @@ import {
   Clock,
   Bookmark,
   Shuffle,
-  Home
+  Home,
+  Menu
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -35,6 +36,7 @@ const App: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [sidebarQuery, setSidebarQuery] = useState('');
 
   const filteredMezmurs = useMemo(() => {
@@ -107,13 +109,16 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (theme === Theme.DARK) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-  }, [theme]);
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setFontSize(prev => prev > 18 ? 18 : prev);
+      }
+    };
+
+    handleResize(); // Set initial value
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSelectMezmur = (id: number) => {
     setSelectedId(id);
@@ -131,39 +136,7 @@ const App: React.FC = () => {
   const isDark = theme === Theme.DARK;
 
   return (
-    <div className={`min-h-screen transition-all duration-700 ${isDark ? 'bg-[#08070a]' : 'bg-gradient-to-br from-[#fbf3df] via-[#f6efe1] to-[#efe1c2]'}`}>
-
-      {/* Background Image */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {/* Main Background Image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700"
-          style={{
-            backgroundImage: 'url(/bg.png)',
-            opacity: isDark ? 0.55 : 0.18,
-            filter: isDark ? 'saturate(0.9) contrast(1.08) brightness(0.9)' : 'sepia(0.65) contrast(1.05) brightness(1.08)'
-          }}
-        />
-
-        {/* Overlay for readability */}
-        <div className={`absolute inset-0 transition-all duration-700 ${isDark
-          ? 'bg-gradient-to-b from-[#07060a]/78 via-[#08070a]/90 to-[#07060a]'
-          : 'bg-gradient-to-b from-[#fbf3df]/82 via-[#f6efe1]/92 to-[#f4ead3]'
-          }`} />
-
-        {/* Additional animated effects */}
-        {isDark ? (
-          <>
-            <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-gradient-to-br from-amber-900/14 via-rose-900/10 to-transparent rounded-full blur-[110px] animate-float" />
-            <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-gradient-to-tl from-yellow-900/12 via-orange-900/10 to-transparent rounded-full blur-[110px] animate-float-delayed" />
-          </>
-        ) : (
-          <>
-            <div className="absolute top-[-10%] right-[-5%] w-[45%] h-[45%] bg-gradient-to-bl from-amber-200/35 via-yellow-100/20 to-transparent rounded-full blur-[90px] animate-float" />
-            <div className="absolute bottom-[-10%] left-[-5%] w-[55%] h-[55%] bg-gradient-to-tr from-orange-200/20 via-amber-100/15 to-transparent rounded-full blur-[90px] animate-float-delayed" />
-          </>
-        )}
-      </div>
+    <div className={`min-h-screen ${isDark ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
 
       {/* Header */}
       <header className={`sticky top-0 z-50 backdrop-blur-2xl border-b transition-all duration-500 ${isDark
@@ -171,41 +144,41 @@ const App: React.FC = () => {
         : 'bg-[#fbf6ea]/85 border-amber-200/60'
         }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+          <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Logo */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               {selectedId !== null && (
                 <button
                   onClick={() => setSelectedId(null)}
-                  className={`p-2 rounded-xl transition-all duration-300 ${isDark
+                  className={`p-1.5 sm:p-2 rounded-xl transition-all duration-300 ${isDark
                     ? 'hover:bg-white/10 text-white/60 hover:text-white'
                     : 'hover:bg-black/5 text-black/40 hover:text-black'
                     }`}
                 >
-                  <ArrowLeft size={20} />
+                  <ArrowLeft size={18} />
                 </button>
               )}
-              <div className="flex items-center gap-3">
-                <div className={`p-2.5 rounded-2xl overflow-hidden ${isDark
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className={`p-1.5 sm:p-2.5 rounded-2xl overflow-hidden ${isDark
                   ? 'bg-gradient-to-br from-amber-500/20 to-orange-600/20 border border-amber-500/20'
                   : 'bg-gradient-to-br from-amber-100/70 to-yellow-50/60 border border-amber-200/60'
                   }`}>
-                  <img src="/img/images.jpeg" alt="Bole Debre Salem" className="w-7 h-7 object-cover rounded-lg" />
+                  <img src="/img/images.jpeg" alt="Bole Debre Salem" className="w-5 h-5 sm:w-7 sm:h-7 object-cover rounded-lg" />
                 </div>
                 <div>
-                  <h1 className={`heading-font text-xl 
+                  <h1 className={`heading-font text-lg sm:text-xl 
                     font-bold tracking-tight ${isDark ? 'text-amber-50' : 'text-stone-900'}`}>
                     የጥምቀት  <span className={isDark ? "text-amber-500" : "text-amber-800"}>
                       መዝሙሮች ስብስብ</span>
                   </h1>
-                  <p className={`text-[10px] uppercase tracking-[0.2em] font-medium ${isDark ? 'text-amber-200/60' : 'text-stone-600'}`}>
+                  <p className={`text-[8px] sm:text-[10px] uppercase tracking-[0.2em] font-medium ${isDark ? 'text-amber-200/60' : 'text-stone-600'}`}>
                     ቦሌ ደብረ ሳሌም መድኃኔዓለም መጥምቁ ቅዱስ ዮሐንስ ወአቡነ አረጋዊ ካቴድራል ፈለገ ዮርዳኖስ ሰንበት ትምህርት ቤት                  </p>
                 </div>
               </div>
             </div>
 
             {/* Controls */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               {/* Home Button - when in reading view */}
               {selectedId !== null && (
                 <button
@@ -219,70 +192,81 @@ const App: React.FC = () => {
                 </button>
               )}
 
-              {/* Random Button */}
               <button
                 onClick={randomMezmur}
-                className={`hidden sm:flex p-2 rounded-xl transition-all duration-300 ${isDark
+                className={`hidden sm:flex p-1.5 sm:p-2 rounded-xl transition-all duration-300 ${isDark
                   ? 'hover:bg-white/10 text-white/60 hover:text-white'
                   : 'hover:bg-black/5 text-black/40 hover:text-black'
                   }`}
                 title="Random Hymn"
               >
-                <Shuffle size={18} />
+                <Shuffle size={16} />
               </button>
 
-              {/* Favorites Toggle */}
               <button
                 onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                className={`p-2 rounded-xl transition-all duration-300 ${showFavoritesOnly
+                className={`hidden sm:flex p-1.5 sm:p-2 rounded-xl transition-all duration-300 ${showFavoritesOnly
                   ? isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-900'
                   : isDark ? 'hover:bg-white/10 text-white/60 hover:text-white' : 'hover:bg-black/5 text-black/40 hover:text-black'
                   }`}
                 title="Favorites"
               >
-                <Bookmark size={18} />
+                <Bookmark size={16} />
               </button>
 
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className={`p-3 rounded-2xl transition-all duration-500 group ${isDark
+                className={`p-2 sm:p-3 rounded-2xl transition-all duration-500 group ${isDark
                   ? 'bg-gradient-to-br from-amber-500/20 to-orange-600/10 hover:from-amber-500/30 hover:to-orange-600/20 border border-amber-500/20'
                   : 'bg-[#fffaf0] hover:bg-amber-50 border border-amber-200 shadow-sm'
                   }`}>
                 {isDark ? (
-                  <Sun size={18} className="text-amber-400 group-hover:rotate-45 transition-transform duration-500" />
+                  <Sun size={16} className="text-amber-400 group-hover:rotate-45 transition-transform duration-500" />
                 ) : (
-                  <Moon size={18} className="text-amber-900 group-hover:-rotate-12 transition-transform duration-500" />
+                  <Moon size={16} className="text-amber-900 group-hover:-rotate-12 transition-transform duration-500" />
                 )}
               </button>
+
+              {/* Burger Menu for reading view on mobile */}
+              {selectedId !== null && (
+                <button
+                  onClick={() => setShowMobileSidebar(true)}
+                  className={`lg:hidden p-2 rounded-xl transition-all duration-300 ${isDark
+                    ? 'hover:bg-white/10 text-white/60 hover:text-white'
+                    : 'hover:bg-black/5 text-black/40 hover:text-black'
+                    }`}
+                >
+                  <Menu size={20} />
+                </button>
+              )}
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 
         {selectedId === null ? (
           /* Collection View */
-          <div className="space-y-10 animate-fadeIn">
+          <div className="space-y-6 sm:space-y-10">
 
             {/* Search Section */}
-            <div className="max-w-2xl mx-auto space-y-4">
+            <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4">
               {/* Search Bar */}
               <div className="relative">
-                <div className={`flex items-center gap-3 px-5 py-3 rounded-2xl border shadow-sm transition-all duration-300 ${isDark
-                  ? 'bg-white/5 border-white/10 focus-within:border-amber-500/50'
-                  : 'bg-[#fffaf0] border-amber-200/80 shadow-amber-100/30 focus-within:border-amber-500/70'
+                <div className={`flex items-center gap-3 sm:gap-4 px-5 sm:px-6 py-4 rounded-[2rem] border transition-all duration-500 ${isDark
+                  ? 'bg-slate-800/40 border-slate-700/50 focus-within:border-amber-500/50 focus-within:ring-4 focus-within:ring-amber-500/10'
+                  : 'bg-white border-amber-200/60 shadow-xl shadow-amber-900/5 focus-within:border-amber-500/40 focus-within:ring-4 focus-within:ring-amber-500/5'
                   }`}>
-                  <Search size={18} className={isDark ? 'text-white/40' : 'text-stone-500'} />
+                  <Search size={16} className={isDark ? 'text-white/40' : 'text-stone-500'} />
                   <input
                     type="text"
                     placeholder="በመዝሙር ስንኝ ፣ በቁጥር ወይም በ መዝሙር ርዕስ ይፈልጉ.."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className={`flex-1 bg-transparent outline-none text-base sm:text-lg ${isDark
+                    className={`flex-1 bg-transparent outline-none text-sm sm:text-base lg:text-lg ${isDark
                       ? 'text-white placeholder:text-white/30'
                       : 'text-stone-900 placeholder:text-stone-500'
                       }`}
@@ -290,12 +274,12 @@ const App: React.FC = () => {
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className={`p-2 rounded-xl transition-colors ${isDark
+                      className={`p-1 sm:p-2 rounded-xl transition-colors ${isDark
                         ? 'hover:bg-white/10 text-white/40'
                         : 'hover:bg-amber-50 text-stone-500'
                         }`}
                     >
-                      <X size={16} />
+                      <X size={14} />
                     </button>
                   )}
                 </div>
@@ -326,7 +310,7 @@ const App: React.FC = () => {
             {/* Header */}
             <div className="flex items-end justify-center">
               <div className="w-full">
-                <h2 className={`heading-font text-center text-4xl sm:text-5xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-stone-900'}`}>
+                <h2 className={`heading-font text-center text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-stone-900'}`}>
                   የጥምቀት መዝሙሮች
                 </h2>
               </div>
@@ -340,21 +324,21 @@ const App: React.FC = () => {
                 <p className="text-sm">እባክዎ የፍለጋ ቃሉን ያስተካክሉ እና እንደገና ይሞክሩ</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
                 {filteredMezmurs.map((mezmur, index) => (
                   <div
                     key={mezmur.id}
                     onClick={() => handleSelectMezmur(mezmur.id)}
-                    className={`group cursor-pointer relative overflow-hidden transition-all duration-500 rounded-3xl p-6 sm:p-8 hover:-translate-y-2 hover:shadow-2xl ${isDark
+                    className={`group cursor-pointer relative overflow-hidden transition-all duration-500 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 hover:-translate-y-2 hover:shadow-2xl ${isDark
                       ? 'bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-amber-500/30 hover:shadow-amber-500/10'
                       : 'bg-[#fffaf0]/90 backdrop-blur-sm border border-amber-200/70 hover:border-amber-400/80 hover:shadow-amber-100/60'
                       }`}
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
                     {/* Hover gradient overlay */}
-                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${isDark
-                      ? 'bg-gradient-to-br from-amber-500/10 via-transparent to-purple-500/10'
-                      : 'bg-gradient-to-br from-amber-50 via-transparent to-yellow-50/60'
+                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${isDark
+                      ? 'bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5'
+                      : 'bg-gradient-to-br from-amber-50/50 via-transparent to-yellow-50/30'
                       }`} />
 
                     {/* Favorite Button */}
@@ -363,17 +347,17 @@ const App: React.FC = () => {
                         e.stopPropagation();
                         toggleFavorite(mezmur.id);
                       }}
-                      className={`absolute top-4 right-4 z-20 p-2 rounded-xl transition-all duration-300 ${favorites.includes(mezmur.id)
+                      className={`absolute top-3 right-3 sm:top-4 sm:right-4 z-20 p-1.5 sm:p-2 rounded-xl transition-all duration-300 ${favorites.includes(mezmur.id)
                         ? isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-900 border border-amber-200/70'
                         : isDark ? 'bg-white/10 text-white/40 hover:text-white hover:bg-white/20' : 'bg-[#fffaf0]/85 text-stone-500 hover:text-stone-800 hover:bg-[#fffaf0] border border-amber-200/60'
                         }`}
                     >
-                      <Bookmark size={16} fill={favorites.includes(mezmur.id) ? 'currentColor' : 'none'} />
+                      <Bookmark size={14} fill={favorites.includes(mezmur.id) ? 'currentColor' : 'none'} />
                     </button>
 
                     {/* Number */}
-                    <div className="relative z-10 mb-6">
-                      <span className={`font-bold tracking-tight transition-all duration-300 text-6xl sm:text-7xl ${isDark
+                    <div className="relative z-10 mb-4 sm:mb-6">
+                      <span className={`font-bold tracking-tight transition-all duration-300 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl ${isDark
                         ? 'text-white/10 group-hover:text-amber-500/40'
                         : 'text-amber-200/60 group-hover:text-amber-600/20'
                         }`}>
@@ -383,23 +367,23 @@ const App: React.FC = () => {
 
                     {/* Title */}
                     <div className="relative z-10">
-                      <h3 className={`heading-font font-bold ethiopic-font leading-tight transition-colors text-xl sm:text-2xl ${isDark
+                      <h3 className={`heading-font font-bold ethiopic-font leading-tight transition-colors text-lg sm:text-xl lg:text-2xl ${isDark
                         ? 'text-white group-hover:text-amber-100'
                         : 'text-stone-900'
                         }`}>
                         {mezmur.title}
                       </h3>
-                      <p className={`mt-3 text-sm line-clamp-2 ${isDark ? 'text-white/60' : 'text-stone-600'}`}>
+                      <p className={`mt-2 sm:mt-3 text-sm line-clamp-2 ${isDark ? 'text-white/60' : 'text-stone-600'}`}>
                         {mezmur.lyrics[0]}...
                       </p>
                     </div>
 
                     {/* Arrow indicator */}
-                    <div className={`absolute bottom-6 right-6 z-10 transition-all duration-300 ${isDark
+                    <div className={`absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-10 transition-all duration-300 ${isDark
                       ? 'text-white/20 group-hover:text-amber-400'
                       : 'text-stone-300 group-hover:text-amber-800'
                       } opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0`}>
-                      <ChevronRight size={24} />
+                      <ChevronRight size={20} />
                     </div>
                   </div>
                 ))}
@@ -409,6 +393,77 @@ const App: React.FC = () => {
         ) : (
           /* Reading View with Sidebar */
           <div className="animate-fadeIn flex gap-8">
+
+            {/* Mobile Sidebar Overlay */}
+            <div className={`fixed inset-0 z-[100] lg:hidden transition-all duration-500 ${showMobileSidebar ? 'visible opacity-100' : 'invisible opacity-0'}`}>
+              <div className={`absolute inset-0 backdrop-blur-sm bg-black/40 transition-opacity duration-500 ${showMobileSidebar ? 'opacity-100' : 'opacity-0'}`} onClick={() => setShowMobileSidebar(false)} />
+              <aside className={`absolute top-0 right-0 h-full w-80 max-w-[90vw] transform transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) ${showMobileSidebar ? 'translate-x-0 shadow-2xl' : 'translate-x-full'} ${isDark
+                ? 'bg-[#0f172a] border-l border-white/10'
+                : 'bg-white border-l border-amber-100'
+                }`}>
+                {/* Mobile Sidebar Header */}
+                <div className={`p-6 border-b flex items-center justify-between ${isDark ? 'border-white/5' : 'border-amber-100/50'}`}>
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-xl ${isDark ? 'bg-amber-500/10' : 'bg-amber-50'}`}>
+                      <BookOpen size={18} className={isDark ? 'text-amber-400' : 'text-amber-700'} />
+                    </div>
+                    <h3 className={`font-bold text-sm tracking-widest uppercase ${isDark ? 'text-white/90' : 'text-stone-800'}`}>
+                      ሁሉም መዝሙራት
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => setShowMobileSidebar(false)}
+                    className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-white/10 text-white/40' : 'hover:bg-black/5 text-stone-500'}`}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <div className="p-4">
+                  <div className="relative">
+                    <Search size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 ${isDark ? 'text-white/30' : 'text-stone-400'}`} />
+                    <input
+                      type="text"
+                      value={sidebarQuery}
+                      onChange={(e) => setSidebarQuery(e.target.value)}
+                      placeholder="ለመፈለግ ይጻፉ..."
+                      className={`w-full pl-10 pr-10 py-3 rounded-2xl outline-none text-sm transition-all ${isDark
+                        ? 'bg-white/5 border border-white/10 focus:border-amber-500/50 text-white'
+                        : 'bg-amber-50/50 border border-amber-100 focus:border-amber-500/50 text-stone-900'
+                        }`}
+                    />
+                  </div>
+                </div>
+
+                {/* Mobile Sidebar List */}
+                <div className="overflow-y-auto h-[calc(100vh-10rem)] p-4 custom-scrollbar">
+                  {sidebarMezmurs.map((mezmur) => (
+                    <button
+                      key={mezmur.id}
+                      onClick={() => {
+                        handleSelectMezmur(mezmur.id);
+                        setShowMobileSidebar(false);
+                      }}
+                      className={`w-full text-left px-4 py-4 rounded-2xl mb-2 transition-all flex items-center gap-4 ${selectedId === mezmur.id
+                        ? isDark
+                          ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20'
+                          : 'bg-amber-600 text-white shadow-lg shadow-amber-600/20'
+                        : isDark
+                          ? 'hover:bg-white/5 text-white/70'
+                          : 'hover:bg-amber-50 text-stone-600'
+                        }`}
+                    >
+                      <span className={`text-xs font-bold w-6 h-6 flex items-center justify-center rounded-lg ${selectedId === mezmur.id ? 'bg-white/20' : isDark ? 'bg-white/5' : 'bg-stone-100'}`}>
+                        {mezmur.id}
+                      </span>
+                      <span className="flex-1 truncate font-medium ethiopic-font">
+                        {mezmur.title}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </aside>
+            </div>
 
             {/* Sidebar - Hymn List */}
             <aside className={`hidden lg:block w-80 flex-shrink-0 sticky top-28 self-start max-h-[calc(100vh-8rem)] overflow-hidden rounded-3xl ${isDark
@@ -495,34 +550,34 @@ const App: React.FC = () => {
                 }`}>
 
                 {/* Decorative top gradient */}
-                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${isDark
-                  ? 'from-amber-500 via-orange-500 to-purple-500'
-                  : 'from-amber-600 via-yellow-600 to-amber-800'
+                <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${isDark
+                  ? 'from-amber-600 via-yellow-500 to-amber-600'
+                  : 'from-amber-700 via-yellow-600 to-amber-700'
                   }`} />
 
-                <div className="p-8 sm:p-12 lg:p-16">
+                <div className="p-6 sm:p-8 lg:p-12 xl:p-16">
 
                   {/* Header */}
-                  <div className="flex flex-wrap items-start justify-between gap-6 mb-12">
+                  <div className="flex flex-wrap items-start justify-between gap-4 sm:gap-6 mb-8 sm:mb-12">
                     {/* Number Badge */}
-                    <div className={`flex items-center gap-4 px-6 py-4 rounded-2xl ${isDark
+                    <div className={`flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 sm:py-4 rounded-2xl ${isDark
                       ? 'bg-gradient-to-br from-amber-500/20 to-orange-600/10 border border-amber-500/20'
                       : 'bg-amber-50 border border-amber-200/70'
                       }`}>
                       <span className={`text-xs font-bold uppercase tracking-widest ${isDark ? 'text-amber-400/70' : 'text-stone-600'}`}>
 
                       </span>
-                      <span className={`text-4xl font-bold ${isDark ? 'text-amber-400' : 'text-amber-900'}`}>
+                      <span className={`text-3xl sm:text-4xl font-bold ${isDark ? 'text-amber-400' : 'text-amber-900'}`}>
                         {String(currentMezmur?.id).padStart(2, '0')}
                       </span>
                     </div>
 
                     {/* Controls */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 sm:gap-2">
                       {/* Favorite Button */}
                       <button
                         onClick={() => toggleFavorite(currentMezmur?.id || 0)}
-                        className={`p-3 rounded-xl border transition-all ${favorites.includes(currentMezmur?.id || 0)
+                        className={`p-2 sm:p-3 rounded-xl border transition-all ${favorites.includes(currentMezmur?.id || 0)
                           ? 'bg-amber-500/20 border-amber-500/30 text-amber-500'
                           : isDark
                             ? 'bg-white/5 border-white/10 hover:bg-white/10 text-white/60 hover:text-white'
@@ -535,22 +590,22 @@ const App: React.FC = () => {
                       <div className={`flex items-center rounded-xl border ${isDark ? 'bg-white/5 border-white/10' : 'bg-amber-50 border-amber-200'
                         }`}>
                         <button
-                          onClick={() => setFontSize(Math.max(16, fontSize - 2))}
-                          className={`p-3 transition-colors ${isDark ? 'hover:bg-white/10 text-white/60' : 'hover:bg-amber-100 text-stone-700'}`}
+                          onClick={() => setFontSize(Math.max(14, fontSize - 2))}
+                          className={`p-2 sm:p-3 transition-colors ${isDark ? 'hover:bg-white/10 text-white/60' : 'hover:bg-amber-100 text-stone-700'}`}
                         >
-                          <Minus size={16} />
+                          <Minus size={14} />
                         </button>
-                        <TypeIcon size={16} className={isDark ? 'text-white/30' : 'text-stone-500'} />
+                        <TypeIcon size={14} className={isDark ? 'text-white/30' : 'text-stone-500'} />
                         <button
                           onClick={() => setFontSize(Math.min(32, fontSize + 2))}
-                          className={`p-3 transition-colors ${isDark ? 'hover:bg-white/10 text-white/60' : 'hover:bg-amber-100 text-stone-700'}`}
+                          className={`p-2 sm:p-3 transition-colors ${isDark ? 'hover:bg-white/10 text-white/60' : 'hover:bg-amber-100 text-stone-700'}`}
                         >
-                          <Plus size={16} />
+                          <Plus size={14} />
                         </button>
                       </div>
                       <button
                         onClick={copyToClipboard}
-                        className={`p-3 rounded-xl border transition-all ${copied
+                        className={`p-2 sm:p-3 rounded-xl border transition-all ${copied
                           ? 'bg-green-500/20 border-green-500/30 text-green-500'
                           : isDark
                             ? 'bg-white/5 border-white/10 hover:bg-white/10 text-white/60 hover:text-white'
@@ -563,7 +618,7 @@ const App: React.FC = () => {
                   </div>
 
                   {/* Title */}
-                  <h1 className={`heading-font text-4xl sm:text-5xl lg:text-6xl font-bold ethiopic-font text-center leading-tight mb-16 ${isDark
+                  <h1 className={`heading-font text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold ethiopic-font text-center leading-tight mb-12 sm:mb-16 ${isDark
                     ? 'text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-100 to-white'
                     : 'text-transparent bg-clip-text bg-gradient-to-r from-stone-950 via-amber-950 to-stone-950'
                     }`}>
@@ -572,7 +627,7 @@ const App: React.FC = () => {
 
                   {/* Lyrics */}
                   <div
-                    className="space-y-8 ethiopic-font text-center leading-relaxed"
+                    className="space-y-6 sm:space-y-8 ethiopic-font text-center leading-relaxed"
                     style={{ fontSize: `${fontSize}px` }}
                   >
                     {currentMezmur?.lyrics.map((line, idx) => {
@@ -596,7 +651,7 @@ const App: React.FC = () => {
 
                   {/* Meaning Section */}
                   {currentMezmur?.['ትርጉም'] && (
-                    <div className={`mt-20 p-8 sm:p-10 rounded-3xl relative overflow-hidden ${isDark
+                    <div className={`mt-16 sm:mt-20 p-6 sm:p-8 lg:p-10 rounded-3xl relative overflow-hidden ${isDark
                       ? 'bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10'
                       : 'bg-gradient-to-br from-amber-50 to-[#fffaf0] border border-amber-200/70'
                       }`}>
@@ -604,13 +659,13 @@ const App: React.FC = () => {
                         ? 'bg-gradient-to-b from-amber-500 to-purple-500'
                         : 'bg-gradient-to-b from-amber-500 to-amber-800'
                         }`} />
-                      <div className="flex items-center gap-3 mb-6">
-                        <Info size={18} className={isDark ? 'text-amber-400' : 'text-amber-800'} />
+                      <div className="flex items-center gap-3 mb-4 sm:mb-6">
+                        <Info size={16} className={isDark ? 'text-amber-400' : 'text-amber-800'} />
                         <h3 className={`heading-font text-sm font-bold uppercase tracking-[0.2em] ${isDark ? 'text-amber-400' : 'text-amber-900'}`}>
                           ትርጉም
                         </h3>
                       </div>
-                      <p className={`text-lg ethiopic-font leading-relaxed italic ${isDark ? 'text-white/60' : 'text-stone-700'}`}>
+                      <p className={`text-base sm:text-lg ethiopic-font leading-relaxed italic ${isDark ? 'text-white/60' : 'text-stone-700'}`}>
                         "{currentMezmur['ትርጉም']}"
                       </p>
                     </div>
@@ -619,7 +674,7 @@ const App: React.FC = () => {
               </article>
 
               {/* Quick Navigation */}
-              <div className={`mt-8 p-6 rounded-2xl ${isDark
+              <div className={`mt-6 sm:mt-8 p-4 sm:p-6 rounded-2xl ${isDark
                 ? 'bg-white/5 border border-white/10'
                 : 'bg-[#fffaf0] border border-amber-200/70 shadow-sm shadow-amber-100/30'
                 }`}>
@@ -627,31 +682,31 @@ const App: React.FC = () => {
                   <button
                     onClick={() => handleSelectMezmur(Math.max(1, (currentMezmur?.id || 1) - 1))}
                     disabled={(currentMezmur?.id || 1) <= 1}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${(currentMezmur?.id || 1) <= 1
+                    className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl transition-all ${(currentMezmur?.id || 1) <= 1
                       ? 'opacity-30 cursor-not-allowed'
                       : isDark
                         ? 'hover:bg-white/10 text-white/60 hover:text-white'
                         : 'hover:bg-amber-50 text-stone-700 hover:text-stone-900 border border-transparent hover:border-amber-200/70'
                       }`}
                   >
-                    <ArrowLeft size={16} />
-                    <span className="text-sm font-medium">Previous</span>
+                    <ArrowLeft size={14} />
+                    <span className="text-xs sm:text-sm font-medium">Previous</span>
                   </button>
-                  <span className={`text-sm ${isDark ? 'text-white/30' : 'text-stone-500'}`}>
+                  <span className={`text-xs sm:text-sm ${isDark ? 'text-white/30' : 'text-stone-500'}`}>
                     {currentMezmur?.id} of {MEZMURS.length}
                   </span>
                   <button
                     onClick={() => handleSelectMezmur(Math.min(MEZMURS.length, (currentMezmur?.id || 1) + 1))}
                     disabled={(currentMezmur?.id || 1) >= MEZMURS.length}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${(currentMezmur?.id || 1) >= MEZMURS.length
+                    className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl transition-all ${(currentMezmur?.id || 1) >= MEZMURS.length
                       ? 'opacity-30 cursor-not-allowed'
                       : isDark
                         ? 'hover:bg-white/10 text-white/60 hover:text-white'
                         : 'hover:bg-amber-50 text-stone-700 hover:text-stone-900 border border-transparent hover:border-amber-200/70'
                       }`}
                   >
-                    <span className="text-sm font-medium">Next</span>
-                    <ChevronRight size={16} />
+                    <span className="text-xs sm:text-sm font-medium">Next</span>
+                    <ChevronRight size={14} />
                   </button>
                 </div>
               </div>
@@ -661,11 +716,11 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className={`relative z-10 mt-20 py-12 border-t ${isDark ? 'border-white/5' : 'border-amber-200/60'
+      <footer className={`relative z-10 mt-16 sm:mt-20 py-8 sm:py-12 border-t ${isDark ? 'border-white/5' : 'border-amber-200/60'
         }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Bottom Bar */}
-          <div className={`pt-8 border-t ${isDark ? 'border-white/5' : 'border-amber-200/60'} text-center`}>
+          <div className={`pt-6 sm:pt-8 border-t ${isDark ? 'border-white/5' : 'border-amber-200/60'} text-center`}>
             <p className={`ethiopic-font text-sm leading-relaxed ${isDark ? 'text-white/70' : 'text-stone-800'} mb-3`}>
               ቦሌ ደብረ ሳሌም መድኃኔዓለም መጥምቁ ቅዱስ ዮሐንስ ወአቡነ አረጋዊ ካቴድራል ፈለገ ዮርዳኖስ ሰንበት ትምህርት ቤት
             </p>
@@ -778,6 +833,19 @@ const App: React.FC = () => {
         
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: rgba(128, 128, 128, 0.4);
+        }
+        
+        .premium-card {
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+        }
+
+        .text-glow {
+          text-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+        }
+
+        .dark .text-glow {
+          text-shadow: 0 0 25px rgba(251, 191, 36, 0.4);
         }
         
         /* Loading shimmer effect */
