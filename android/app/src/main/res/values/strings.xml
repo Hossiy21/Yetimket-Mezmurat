@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">yetimket mezmurat</string>
+    <string name="title_activity_main">yetimket mezmurat</string>
+    <string name="package_name">com.bolemedhanialem.mezmurtinat</string>
+    <string name="custom_url_scheme">com.bolemedhanialem.mezmurtinat</string>
+</resources>

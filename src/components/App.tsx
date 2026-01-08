@@ -248,7 +248,7 @@ const App: React.FC = () => {
                 value={sidebarQuery}
                 onChange={(e) => setSidebarQuery(e.target.value)}
                 placeholder="በመዝሙር ርዕስ ይፈልጉ..."
-                className={`w-full pl-10 pr-10 py-4 rounded-2xl outline-none text-sm transition-all ethiopic-font ${isDark
+                className={`w-full pl-10 pr-10 py-4 rounded-2xl outline-none appearance-none focus:ring-0 text-sm transition-all ethiopic-font ${isDark
                   ? 'bg-white/5 border border-white/10 focus:border-amber-500/50 text-white'
                   : 'bg-amber-50/70 border border-amber-200 focus:border-amber-500/50 text-stone-900'
                   }`}
@@ -433,7 +433,7 @@ const App: React.FC = () => {
                     placeholder="በመዝሙር ስንኝ ፣ በቁጥር ወይም በ መዝሙር ርዕስ ይፈልጉ.."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className={`flex-1 bg-transparent outline-none text-sm sm:text-base lg:text-lg ${isDark
+                    className={`flex-1 bg-transparent !border-0 !outline-none !shadow-none !ring-0 appearance-none text-sm sm:text-base lg:text-lg ${isDark
                       ? 'text-white placeholder:text-white/30'
                       : 'text-stone-900 placeholder:text-stone-500'
                       }`}
@@ -593,7 +593,7 @@ const App: React.FC = () => {
                     value={sidebarQuery}
                     onChange={(e) => setSidebarQuery(e.target.value)}
                     placeholder="በመዝሙር ርዕስ ይፈልጉ..."
-                    className={`w-full pl-10 pr-10 py-2.5 rounded-xl border outline-none text-sm transition-all duration-300 ${isDark
+                    className={`w-full pl-10 pr-10 py-2.5 rounded-xl outline-none appearance-none focus:ring-0 text-sm transition-all duration-300 ${isDark
                       ? 'bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-amber-500/40'
                       : 'bg-[#fffaf0] border-amber-200/80 text-stone-900 placeholder:text-stone-500 focus:border-amber-500/70'
                       }`}
