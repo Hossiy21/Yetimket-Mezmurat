@@ -35,12 +35,20 @@ const getContentSize = (lyricsCount: number): ContentSize => {
 const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [theme, setTheme] = useState<Theme>(
-    window.matchMedia('(prefers-color-scheme: dark)').matches ? Theme.DARK : Theme.LIGHT
-  );
-  const [fontSize, setFontSize] = useState<number>(20);
+  const [theme, setTheme] = useState<Theme>(() => {
+    const savedTheme = localStorage.getItem('mezmur_theme');
+    if (savedTheme) return savedTheme as Theme;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? Theme.DARK : Theme.LIGHT;
+  });
+  const [fontSize, setFontSize] = useState<number>(() => {
+    const savedSize = localStorage.getItem('mezmur_font_size');
+    return savedSize ? parseInt(savedSize) : 20;
+  });
   const [copied, setCopied] = useState(false);
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<number[]>(() => {
+    const savedFavs = localStorage.getItem('mezmur_favorites');
+    return savedFavs ? JSON.parse(savedFavs) : [];
+  });
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [sidebarQuery, setSidebarQuery] = useState('');
@@ -127,7 +135,18 @@ const App: React.FC = () => {
     } else {
       document.documentElement.classList.remove('dark');
     }
+    localStorage.setItem('mezmur_theme', theme);
   }, [theme]);
+
+  // Persist Font Size
+  useEffect(() => {
+    localStorage.setItem('mezmur_font_size', fontSize.toString());
+  }, [fontSize]);
+
+  // Persist Favorites
+  useEffect(() => {
+    localStorage.setItem('mezmur_favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   const handleSelectMezmur = (id: number) => {
     setSelectedId(id);
@@ -314,10 +333,9 @@ const App: React.FC = () => {
                   <img src="/img/images.jpeg" alt="Bole Debre Salem" className="w-5 h-5 sm:w-7 sm:h-7 object-cover rounded-lg" />
                 </div>
                 <div>
-                  <h1 className={`heading-font text-lg sm:text-xl 
+                  <h1 className={`heading-font text-base sm:text-lg lg:text-xl 
                     font-bold tracking-tight ${isDark ? 'text-amber-50' : 'text-stone-900'}`}>
-                    የጥምቀት  <span className={isDark ? "text-amber-500" : "text-amber-800"}>
-                      መዝሙሮች ስብስብ</span>
+                    የጥምቀት <span className={isDark ? "text-amber-500" : "text-amber-800"}>መዝሙሮች</span>
                   </h1>
                 </div>
               </div>
@@ -351,13 +369,18 @@ const App: React.FC = () => {
 
               <button
                 onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                className={`hidden sm:flex p-1.5 sm:p-2 rounded-xl transition-all duration-300 ${showFavoritesOnly
-                  ? isDark ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-900'
-                  : isDark ? 'hover:bg-white/10 text-white/60 hover:text-white' : 'hover:bg-black/5 text-black/40 hover:text-black'
+                className={`w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center rounded-full transition-all duration-500 group relative ${showFavoritesOnly
+                  ? isDark ? 'bg-gradient-to-br from-amber-500/40 to-orange-600/20 border border-amber-500/40' : 'bg-amber-100 border border-amber-200 shadow-sm shadow-amber-900/10'
+                  : isDark ? 'bg-white/5 border border-white/10 hover:bg-white/10' : 'bg-[#fffaf0] border border-amber-200 shadow-sm'
                   }`}
                 title="Favorites"
               >
-                <Bookmark size={16} />
+                <Bookmark size={18} className={showFavoritesOnly ? (isDark ? 'text-amber-400' : 'text-amber-900') : (isDark ? 'text-white/60' : 'text-stone-700')} fill={showFavoritesOnly ? 'currentColor' : 'none'} />
+                {favorites.length > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-white text-[9px] sm:text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-transparent">
+                    {favorites.length}
+                  </span>
+                )}
               </button>
 
               {/* Theme Toggle */}
@@ -374,18 +397,16 @@ const App: React.FC = () => {
                 )}
               </button>
 
-              {/* Burger Menu for reading view on mobile */}
-              {selectedId !== null && (
-                <button
-                  onClick={() => setShowMobileSidebar(true)}
-                  className={`lg:hidden p-2 rounded-xl transition-all duration-300 ${isDark
-                    ? 'hover:bg-white/10 text-white/60 hover:text-white'
-                    : 'hover:bg-black/5 text-black/40 hover:text-black'
-                    }`}
-                >
-                  <Menu size={20} />
-                </button>
-              )}
+              {/* Burger Menu for mobile - Now visible on home page too */}
+              <button
+                onClick={() => setShowMobileSidebar(true)}
+                className={`lg:hidden p-2 rounded-xl transition-all duration-300 ${isDark
+                  ? 'hover:bg-white/10 text-white/60 hover:text-white'
+                  : 'hover:bg-black/5 text-black/40 hover:text-black'
+                  }`}
+              >
+                <Menu size={20} />
+              </button>
             </div>
           </div>
         </div>
@@ -927,6 +948,16 @@ const App: React.FC = () => {
         
         .animate-glow {
           animation: glow 3s ease-in-out infinite;
+        }
+
+        /* Custom breakpoints */
+        @media (min-width: 400px) {
+          .xs\\:inline { display: inline; }
+          .xs\\:hidden { display: none; }
+        }
+        @media (max-width: 399px) {
+          .xs\\:inline { display: none; }
+          .xs\\:hidden { display: inline; }
         }
         
         /* Smooth scroll behavior */
