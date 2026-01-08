@@ -171,8 +171,6 @@ const App: React.FC = () => {
                     የጥምቀት  <span className={isDark ? "text-amber-500" : "text-amber-800"}>
                       መዝሙሮች ስብስብ</span>
                   </h1>
-                  <p className={`text-[8px] sm:text-[10px] uppercase tracking-[0.2em] font-medium ${isDark ? 'text-amber-200/60' : 'text-stone-600'}`}>
-                    ቦሌ ደብረ ሳሌም መድኃኔዓለም መጥምቁ ቅዱስ ዮሐንስ ወአቡነ አረጋዊ ካቴድራል ፈለገ ዮርዳኖስ ሰንበት ትምህርት ቤት                  </p>
                 </div>
               </div>
             </div>
@@ -313,6 +311,9 @@ const App: React.FC = () => {
                 <h2 className={`heading-font text-center text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-stone-900'}`}>
                   የጥምቀት መዝሙሮች
                 </h2>
+                <p className={`mt-4 text-center ethiopic-font text-xs sm:text-sm lg:text-base max-w-2xl mx-auto leading-relaxed ${isDark ? 'text-amber-200/60' : 'text-stone-600'}`}>
+                  ቦሌ ደብረ ሳሌም መድኃኔዓለም መጥምቁ ቅዱስ ዮሐንስ ወአቡነ አረጋዊ ካቴድራል ፈለገ ዮርዳኖስ ሰንበት ትምህርት ቤት
+                </p>
               </div>
             </div>
 
